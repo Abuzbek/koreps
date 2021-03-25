@@ -1,11 +1,20 @@
 <template>
   <v-container fluid>
+    <div class="loader" v-if="!loading">
+        <v-progress-circular
+        :size="100"
+        :width="7"
+        color="#fed049"
+        indeterminate
+      ></v-progress-circular>
+    </div>
     <v-data-table
       :headers="headers"
       :items="api"
       sort-by="calories"
       :search="search"
       class="elevation-2"
+      v-else
     >
       <template v-slot:top>
         <v-toolbar flat>
@@ -55,17 +64,14 @@ export default {
       { text: "O'qituvchilar", value: "teacher" },
       { text: "Actions", value: "actions", sortable: false }
     ],
-    dataNow: new Date()
+    dataNow: new Date(),
+    api : [],
+    loading:false
   }),
-  async fetch({ store }) {
-    if (store.getters["table/api"].length === 0) {
-      await store.dispatch("table/fetchApi");
-    }
-  },
   computed: {
-    api() {
-      return this.$store.getters["table/api"];
-    },
+    // api() {
+    //   return this.$store.getters["table/api"];
+    // },
     getMonth() {
       let getMonthh1 = this.dataNow;
       getMonthh1.setDate(1);
@@ -98,10 +104,20 @@ export default {
   },
   methods: {
     editItem(item) {
-       console.log(`/update/${item.id}`);
+       this.$router.push(`/update/${item.id}`);
     },
-    deleteItem(item) {
-      console.log(`/delete/${item.id}`);
+    async deleteItem(item) {
+      try {
+        await this.$store.dispatch("addUser/deleteUser", {...item});
+        console.log(item);
+        this.loading = false
+        const fetchUser = await this.$store.dispatch('addUser/fetchUser')
+        this.api = fetchUser
+
+        setTimeout(()=>{this.loading = true},100)
+      } catch (error) {
+        console.log(error);
+      }
     },
     seeItem(item){
       console.log(item.id);
@@ -127,6 +143,11 @@ export default {
         return "gray";
       }
     }
+  },
+  async mounted(){
+    const fetchUser = await this.$store.dispatch('addUser/fetchUser')
+    this.api = fetchUser
+    this.loading = true
   }
 };
 </script>
@@ -145,5 +166,12 @@ export default {
   100% {
     transform: scale(1);
   }
+}
+.loader{
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

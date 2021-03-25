@@ -28,7 +28,7 @@ export default [
     direction:'EPS',
     phone_number:'+998990127427',
     contract_number: '12',
-    price_day: 1,
+    price_day: 5,
     price_month: new Intl.DateTimeFormat("en-EN", {month: "long",}).format(
        new Date(x)
     ),

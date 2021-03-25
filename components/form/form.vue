@@ -1,7 +1,7 @@
 <template>
   <v-card color="#f5f5f5">
-    <v-col> 
-      <v-card-title class="text-center">{{titleHeading}}</v-card-title>
+    <v-col>
+      <v-card-title class="text-center">{{ titleHeading }}</v-card-title>
       <v-row>
         <v-col cols="12" md="11" class="ma-auto">
           <v-row>
@@ -64,7 +64,7 @@
             </v-col>
             <v-col cols="12" md="4">
               <v-autocomplete
-                v-model="values"
+                v-model="value"
                 :items="items"
                 outlined
                 dense
@@ -87,15 +87,17 @@
 </template>
 <script>
 export default {
-  props:{
-    titleHeading:{
-      type:String,
-      default:`O'quvchi qoshamizmi?`
+  props: {
+    titleHeading: {
+      type: String,
+      default: `O'quvchi qoshamizmi?`
+    },
+    values: {
+      type: Object
     }
   },
   data: () => ({
-    
-    values: [],
+    value: [],
     items: [
       "January",
       "February",
@@ -125,23 +127,12 @@ export default {
   }),
   computed: {
     price_month() {
-      return this.values[this.values.length - 1];
+      return this.value[this.value.length - 1];
     }
   },
   methods: {
     submit() {
-      // console.table({
-      //   name: this.name,
-      //   direction: this.direction,
-      //   phone_number: this.phone_number,
-      //   contract_number: this.contract_number,
-      //   price_day: this.price_day,
-      //   price_month: this.price_month,
-      //   price: this.price,
-      //   time_class: this.time_class,
-      //   teacher: this.teacher
-      // });
-      this.$emit('submitHandler', {
+      this.$emit("submitHandler", {
         name: this.name,
         direction: this.direction,
         phone_number: this.phone_number,
@@ -149,24 +140,38 @@ export default {
         price_day: this.price_day,
         price_month: this.price_month,
         price: this.price,
+        all_month: this.value,
         time_class: this.time_class,
         teacher: this.teacher
-      })
-      this.name=''
-      this.direction=''
-      this.phone_number=''
-      this.contract_number=''
-      this.price_day=''
-      this.price=''
-      this.time_class=''
-      this.teacher=''
-      this.values= []
+      });
+      this.name = "";
+      this.direction = "";
+      this.phone_number = "";
+      this.contract_number = "";
+      this.price_day = "";
+      this.price = "";
+      this.time_class = "";
+      this.teacher = "";
+      this.value = [];
+    }
+  },
+  mounted() {
+    if (this.values) {
+      this.name = this.values.name;
+      this.direction = this.values.direction;
+      this.phone_number = this.values.phone_number;
+      this.contract_number = this.values.contract_number;
+      this.price_day = this.values.price_day;
+      this.price = this.values.price;
+      this.time_class = this.values.time_class;
+      this.teacher = this.values.teacher;
+      this.value = this.values.all_month;
     }
   }
 };
 </script>
 <style lang="scss" scoped>
-.text-center{
+.text-center {
   text-align: center !important;
   display: flex;
   justify-content: center;

@@ -1,10 +1,18 @@
 <template>
   <div class="update_body" @mousemove="openMenu($event)">
-  <Drawer  :drawer="drawers" :items="items" />
+     <div class="loader" v-if="!loading">
+      <v-progress-circular
+      :size="100"
+      :width="7"
+      color="#fed049"
+      indeterminate
+    ></v-progress-circular>
+    </div>
   <v-data-table
+    v-else
     :headers="headers"
     :items="api"
-    :items-per-page="50" 
+    :items-per-page="50"
     class="elevation-0"
   >
     <template v-slot:item.price_day="{ item }">
@@ -13,6 +21,7 @@
         </v-chip>
       </template>
   </v-data-table>
+  <Drawer :drawer="drawers" :items="items" />
   </div>
 </template>
 <script>
@@ -23,6 +32,8 @@ export default {
   },
   layout:'empty',
   data:()=>({
+    loading:false,
+    api:[],
     headers: [
       { text: "F.I.SH", align: "start", value: "name" },
       { text: "Yo'nalish", value: "direction" },
@@ -92,15 +103,12 @@ export default {
     }
   }
   ,
-  async fetch({store}){
-    if (store.getters['table/api'].length === 0) {
-      await store.dispatch("table/fetchApi")
-    }
+  async mounted(){
+    const fetchUser = await this.$store.dispatch('addUser/fetchUser')
+    this.api = fetchUser
+    this.loading = true
   },
   computed:{
-    api(){
-      return this.$store.getters['table/api']
-    },
     getMonth() {
       let getMonthh1 = this.dataNow;
       getMonthh1.setDate(1);
@@ -152,5 +160,12 @@ export default {
   span{
     color: rgba(0, 0, 0, 0.6);
   }
+}
+.loader{
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
