@@ -93,7 +93,7 @@ export default {
       }
     },
     openMenu(e){
-      if(e.clientX >= 0 && 30 >= e.clientX){
+      if(e.clientX >= 0 && 70 >= e.clientX){
         this.drawers = true
       }
       else{
