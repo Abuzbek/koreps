@@ -26,11 +26,11 @@ export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     titleTemplate: "%s - korea-eps-cem",
-    title: "korea-eps-cem",
+    title: "KORUZEPS - IT'S Very GOOD CRM SySteam",
     meta: [
       { charset: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { hid: "description", name: "description", content: "" }
+      { hid: "description", name: "description", content: "KORUZEPS - IT'S Very GOOD CRM SySteam" }
     ],
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }]
   },
