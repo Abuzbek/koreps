@@ -1,39 +1,42 @@
 <template>
   <div class="update_body" @mousemove="openMenu($event)">
-     <div class="loader" v-if="!loading">
+    <div class="loader" v-if="!loading">
       <v-progress-circular
-      :size="100"
-      :width="7"
-      color="#fed049"
-      indeterminate
-    ></v-progress-circular>
+        :size="100"
+        :width="7"
+        color="#fed049"
+        indeterminate
+      ></v-progress-circular>
     </div>
-  <v-data-table
-    v-else
-    :headers="headers"
-    :items="api"
-    :items-per-page="50"
-    class="elevation-0"
-  >
-    <template v-slot:item.price_day="{ item }">
+    <v-data-table
+      v-else
+      :headers="headers"
+      :items="api"
+      :items-per-page="50"
+      class="elevation-0"
+    >
+      <template v-slot:item.price="{ item }">
+        {{ item.price + ".000 UZS" }}
+      </template>
+      <template v-slot:item.price_day="{ item }">
         <v-chip :color="getColor(item.price_day, item.price_month)" dark>
           <span>{{ item.price_day }} {{ item.price_month }}</span>
         </v-chip>
       </template>
-  </v-data-table>
-  <Drawer :drawer="drawers" :items="items" />
+    </v-data-table>
+    <Drawer :drawer="drawers" :items="items" />
   </div>
 </template>
 <script>
-import Drawer from '../../components/app/Drawer.vue'
+import Drawer from "../../components/app/Drawer.vue";
 export default {
-  components:{
+  components: {
     Drawer
   },
-  layout:'empty',
-  data:()=>({
-    loading:false,
-    api:[],
+  layout: "empty",
+  data: () => ({
+    loading: false,
+    api: [],
     headers: [
       { text: "F.I.SH", align: "start", value: "name" },
       { text: "Yo'nalish", value: "direction" },
@@ -42,35 +45,35 @@ export default {
       { text: "To'langan sanasi", value: "price_day" },
       { text: "To'lov", value: "price" },
       { text: "Dars vaqtlari", value: "time_class" },
-      { text: "O'qituvchilar", value: "teacher" },
+      { text: "O'qituvchilar", value: "teacher" }
     ],
     drawers: false,
     items: [
-        {
-          icon: "mdi-home",
-          title: "Welcome",
-          to: "/"
-        },
-        {
-          icon: "mdi-apps",
-          title: "Data Table",
-          to: "/table"
-        },
-        {
-          icon: "mdi-plus",
-          title: "Add Child",
-          to: "/addChild"
-        },
-        {
-          icon: "mdi-printer",
-          title: "Data Print",
-          to: "/update"
-        }
+      {
+        icon: "mdi-home",
+        title: "Welcome",
+        to: "/"
+      },
+      {
+        icon: "mdi-apps",
+        title: "Data Table",
+        to: "/table"
+      },
+      {
+        icon: "mdi-plus",
+        title: "Add Child",
+        to: "/addChild"
+      },
+      {
+        icon: "mdi-printer",
+        title: "Data Print",
+        to: "/update"
+      }
     ],
-    user:[],
+    user: [],
     dataNow: new Date()
   }),
-  methods:{
+  methods: {
     getColor(dataDay, month) {
       if (
         (dataDay - Number(this.getDay) <= 10 && this.getMonth === month) ||
@@ -92,23 +95,21 @@ export default {
         return "gray";
       }
     },
-    openMenu(e){
-      if(e.clientX >= 0 && 70 >= e.clientX){
-        this.drawers = true
-      }
-      else{
-        this.drawers = false
+    openMenu(e) {
+      if (e.clientX >= 0 && 70 >= e.clientX) {
+        this.drawers = true;
+      } else {
+        this.drawers = false;
       }
       console.log(this.drawers);
     }
-  }
-  ,
-  async mounted(){
-    const fetchUser = await this.$store.dispatch('addUser/fetchUser')
-    this.api = fetchUser
-    this.loading = true
   },
-  computed:{
+  async mounted() {
+    const fetchUser = await this.$store.dispatch("addUser/fetchUser");
+    this.api = fetchUser;
+    this.loading = true;
+  },
+  computed: {
     getMonth() {
       let getMonthh1 = this.dataNow;
       getMonthh1.setDate(1);
@@ -139,29 +140,29 @@ export default {
       );
     }
   }
-}
+};
 </script>
 <style lang="scss">
-.update_body{
+.update_body {
   min-height: 100vh;
   padding: 15px;
 }
-.green{
-  background: #4CAF50 !important;
+.green {
+  background: #4caf50 !important;
 }
-.orange{
+.orange {
   background: #ff9800 !important;
 }
-.red{
-  background: #F44336 !important ;
+.red {
+  background: #f44336 !important ;
 }
-.theme--light.v-data-table > .v-data-table__wrapper > table > thead > tr > th{
+.theme--light.v-data-table > .v-data-table__wrapper > table > thead > tr > th {
   text-align: left !important;
-  span{
+  span {
     color: rgba(0, 0, 0, 0.6);
   }
 }
-.loader{
+.loader {
   width: 100%;
   height: 100vh;
   display: flex;

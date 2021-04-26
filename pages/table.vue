@@ -35,6 +35,9 @@
           <span>{{ item.price_day }} {{ item.price_month }}</span>
         </v-chip>
       </template>
+      <template v-slot:item.price="{ item }">
+        {{item.price+'.000 UZS'}}
+      </template>
       <template v-slot:item.actions="{ item }">
         <v-icon small class="mr-2" @click="editItem(item)">
           mdi-pencil
