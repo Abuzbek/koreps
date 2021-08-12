@@ -1,14 +1,17 @@
 <template>
-  <v-app dark >
+  <v-app dark>
     <Drawer :drawer="drawers" :items="items" />
-    <v-app-bar fixed app color="#282846" style="color:#fed049;">
-      <v-app-bar-nav-icon style="color:#fed049;" @click.stop="drawers = !drawers" />
+    <v-app-bar fixed app color="#282846" style="color: #fed049">
+      <v-app-bar-nav-icon
+        style="color: #fed049"
+        @click.stop="drawers = !drawers"
+      />
       <v-toolbar-title v-text="title" />
       <v-spacer />
       <div>{{ dates }}</div>
     </v-app-bar>
     <v-main>
-        <nuxt />
+      <nuxt />
     </v-main>
     <v-btn
       class="mx-2 fixed_btn"
@@ -17,9 +20,7 @@
       tag="nuxt-link"
       to="/addChild"
     >
-      <v-icon style="color:#d8ebe4;">
-        mdi-account-plus
-      </v-icon>
+      <v-icon style="color: #d8ebe4"> mdi-account-plus </v-icon>
     </v-btn>
   </v-app>
 </template>
@@ -27,7 +28,7 @@
 import Drawer from "../components/app/Drawer.vue";
 export default {
   components: {
-   Drawer
+    Drawer,
   },
   data() {
     return {
@@ -37,23 +38,23 @@ export default {
         {
           icon: "mdi-home",
           title: "Welcome",
-          to: "/"
+          to: "/",
         },
         {
           icon: "mdi-apps",
           title: "Data Table",
-          to: "/table"
+          to: "/table",
         },
         {
           icon: "mdi-plus",
           title: "Add Child",
-          to: "/addChild"
+          to: "/addChild",
         },
         {
           icon: "mdi-printer",
           title: "Data Print",
-          to: "/update"
-        }
+          to: "/update",
+        },
       ],
       options: {
         day: "2-digit",
@@ -61,9 +62,9 @@ export default {
         year: "numeric",
         hour: "2-digit",
         minute: "2-digit",
-        second: "2-digit"
+        second: "2-digit",
       },
-      title: "KOREPS"
+      title: "KOREPS",
     };
   },
   mounted() {
@@ -76,14 +77,22 @@ export default {
       return new Intl.DateTimeFormat("en-EN", this.options).format(
         new Date(this.date)
       );
-    }
-  }
+    },
+    path() {
+      return this.$route;
+    },
+  },
+  watch: {
+    path() {
+      this.drawers = false;
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
 .fixed_btn {
   position: fixed;
-  bottom: 50px;
-  right: 50px;
+  bottom: 10px;
+  right: 10px;
 }
 </style>

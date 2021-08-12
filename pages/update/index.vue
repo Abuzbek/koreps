@@ -12,9 +12,13 @@
       v-else
       :headers="headers"
       :items="api"
-      :items-per-page="50"
+      :items-per-page="api.length"
+      hide-default-footer
       class="elevation-0"
     >
+      <template v-slot:item.number="{ index }">
+          {{ index + 1 }}
+      </template>
       <template v-slot:item.price="{ item }">
         {{ item.price + ".000 UZS" }}
       </template>
@@ -31,13 +35,14 @@
 import Drawer from "../../components/app/Drawer.vue";
 export default {
   components: {
-    Drawer
+    Drawer,
   },
   layout: "empty",
   data: () => ({
     loading: false,
     api: [],
     headers: [
+      { text: "№", align: "start", value: "number" },
       { text: "F.I.SH", align: "start", value: "name" },
       { text: "Yo'nalish", value: "direction" },
       { text: "Tel. raqami", value: "phone_number" },
@@ -45,33 +50,33 @@ export default {
       { text: "To'langan sanasi", value: "price_day" },
       { text: "To'lov", value: "price" },
       { text: "Dars vaqtlari", value: "time_class" },
-      { text: "O'qituvchilar", value: "teacher" }
+      { text: "O'qituvchilar", value: "teacher" },
     ],
     drawers: false,
     items: [
       {
         icon: "mdi-home",
         title: "Welcome",
-        to: "/"
+        to: "/",
       },
       {
         icon: "mdi-apps",
         title: "Data Table",
-        to: "/table"
+        to: "/table",
       },
       {
         icon: "mdi-plus",
         title: "Add Child",
-        to: "/addChild"
+        to: "/addChild",
       },
       {
         icon: "mdi-printer",
         title: "Data Print",
-        to: "/update"
-      }
+        to: "/update",
+      },
     ],
     user: [],
-    dataNow: new Date()
+    dataNow: new Date(),
   }),
   methods: {
     getColor(dataDay, month) {
@@ -96,17 +101,17 @@ export default {
       }
     },
     openMenu(e) {
-      if (e.clientX >= 0 && 70 >= e.clientX) {
+      if (e.clientX >= 0 && 30 >= e.clientX) {
         this.drawers = true;
       } else {
         this.drawers = false;
       }
-      console.log(this.drawers);
-    }
+    },
   },
   async mounted() {
     const fetchUser = await this.$store.dispatch("addUser/fetchUser");
     this.api = fetchUser;
+    console.log(fetchUser);
     this.loading = true;
   },
   computed: {
@@ -138,8 +143,8 @@ export default {
       return new Intl.DateTimeFormat("en-EN", { month: "long" }).format(
         new Date(getMonth2)
       );
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss">

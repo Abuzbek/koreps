@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <div class="loader" v-if="!loading">
-        <v-progress-circular
+      <v-progress-circular
         :size="100"
         :width="7"
         color="#fed049"
@@ -30,23 +30,140 @@
           ></v-text-field>
         </v-toolbar>
       </template>
+      <template v-slot:item.number="{ index }">
+        <div
+          style="
+            height: 100%;
+            margin-right: -16px;
+            margin-left: -16px;
+            padding: 0px 16px; cursor:pointer;
+          "
+          class="d-flex align-center"
+          @click.stop="editItem(item)"
+        >
+          {{ index + 1 }}
+        </div>
+      </template>
+      <template v-slot:item.name="{ item }">
+        <div
+          style="
+            height: 100%;
+            margin-right: -16px;
+            margin-left: -16px;
+            padding: 0px 16px; cursor:pointer;
+          "
+          class="d-flex align-center"
+          @click.stop="editItem(item)"
+        >
+          {{ item.name }}
+        </div>
+      </template>
+      <template v-slot:item.direction="{ item }">
+        <div
+          style="
+            height: 100%;
+            margin-right: -16px;
+            margin-left: -16px;
+            padding: 0px 16px; cursor:pointer;
+          "
+          class="d-flex align-center"
+          @click.stop="editItem(item)"
+        >
+          {{ item.direction }}
+        </div>
+      </template>
+      <template v-slot:item.phone_number="{ item }">
+        <div
+          style="
+            height: 100%;
+            margin-right: -16px;
+            margin-left: -16px;
+            padding: 0px 16px; cursor:pointer;
+          "
+          class="d-flex align-center"
+          @click.stop="editItem(item)"
+        >
+          {{ item.phone_number }}
+        </div>
+      </template>
+      <template v-slot:item.contract_number="{ item }">
+        <div
+          style="
+            height: 100%;
+            margin-right: -16px;
+            margin-left: -16px;
+            padding: 0px 16px; cursor:pointer;
+          "
+          class="d-flex align-center"
+          @click.stop="editItem(item)"
+        >
+          {{ item.contract_number }}
+        </div>
+      </template>
       <template v-slot:item.price_day="{ item }">
-        <v-chip :color="getColor(item.price_day, item.price_month)" dark>
-          <span>{{ item.price_day }} {{ item.price_month }}</span>
-        </v-chip>
+        <div
+          style="
+            height: 100%;
+            margin-right: -16px;
+            margin-left: -16px;
+            padding: 0px 16px; cursor:pointer;
+          "
+          class="d-flex align-center"
+          @click.stop="editItem(item)"
+        >
+          <v-chip :color="getColor(item.price_day, item.price_month)" dark>
+            <span>{{ item.price_day }} {{ item.price_month }}</span>
+          </v-chip>
+        </div>
       </template>
       <template v-slot:item.price="{ item }">
-        {{item.price+'.000 UZS'}}
+        <div
+          style="
+            height: 100%;
+            margin-right: -16px;
+            margin-left: -16px;
+            padding: 0px 16px; cursor:pointer;
+          "
+          class="d-flex align-center"
+          @click.stop="editItem(item)"
+        >
+          {{ item.price + ".000 UZS" }}
+        </div>
+      </template>
+      <template v-slot:item.time_class="{ item }">
+        <div
+          style="
+            height: 100%;
+            margin-right: -16px;
+            margin-left: -16px;
+            padding: 0px 16px; cursor:pointer;
+          "
+          class="d-flex align-center"
+          @click.stop="editItem(item)"
+        >
+          {{ item.time_class }}
+        </div>
+      </template>
+      <template v-slot:item.teacher="{ item }">
+        <div
+          style="
+            height: 100%;
+            margin-right: -16px;
+            margin-left: -16px;
+            padding: 0px 16px; cursor:pointer;
+          "
+          class="d-flex align-center"
+          @click.stop="editItem(item)"
+        >
+          {{ item.teacher }}
+        </div>
       </template>
       <template v-slot:item.actions="{ item }">
-        <v-icon small class="mr-2" @click="editItem(item)">
+        <v-icon small class="mr-2" @click.stop="editItem(item)">
           mdi-pencil
         </v-icon>
-        <v-icon small class="mr-2" @click="deleteItem(item)">
+        <v-icon small class="mr-2" @click.stop="deleteItem(item)">
           mdi-delete
-        </v-icon>
-        <v-icon small @click="seeItem(item)">
-          mdi-eye
         </v-icon>
       </template>
     </v-data-table>
@@ -57,6 +174,7 @@ export default {
   data: () => ({
     search: "",
     headers: [
+      { text: "№", align: "start", value: "number" },
       { text: "F.I.SH", align: "start", value: "name" },
       { text: "Yo'nalish", value: "direction" },
       { text: "Tel. raqami", value: "phone_number" },
@@ -65,11 +183,11 @@ export default {
       { text: "To'lov", value: "price" },
       { text: "Dars vaqtlari", value: "time_class" },
       { text: "O'qituvchilar", value: "teacher" },
-      { text: "Actions", value: "actions", sortable: false }
+      { text: "Actions", value: "actions", sortable: false },
     ],
     dataNow: new Date(),
-    api : [],
-    loading:false
+    api: [],
+    loading: false,
   }),
   computed: {
     // api() {
@@ -103,26 +221,28 @@ export default {
       return new Intl.DateTimeFormat("en-EN", { month: "long" }).format(
         new Date(getMonth2)
       );
-    }
+    },
   },
   methods: {
     editItem(item) {
-       this.$router.push(`/update/${item.id}`);
+      this.$router.push(`/update/${item.id}`);
     },
     async deleteItem(item) {
       try {
-        await this.$store.dispatch("addUser/deleteUser", {...item});
+        await this.$store.dispatch("addUser/deleteUser", { ...item });
         console.log(item);
-        this.loading = false
-        const fetchUser = await this.$store.dispatch('addUser/fetchUser')
-        this.api = fetchUser
+        this.loading = false;
+        const fetchUser = await this.$store.dispatch("addUser/fetchUser");
+        this.api = fetchUser;
 
-        setTimeout(()=>{this.loading = true},100)
+        setTimeout(() => {
+          this.loading = true;
+        }, 100);
       } catch (error) {
         console.log(error);
       }
     },
-    seeItem(item){
+    seeItem(item) {
       console.log(item.id);
     },
     getColor(dataDay, month) {
@@ -145,13 +265,13 @@ export default {
       } else {
         return "gray";
       }
-    }
+    },
   },
-  async mounted(){
-    const fetchUser = await this.$store.dispatch('addUser/fetchUser')
-    this.api = fetchUser
-    this.loading = true
-  }
+  async mounted() {
+    const fetchUser = await this.$store.dispatch("addUser/fetchUser");
+    this.api = fetchUser;
+    this.loading = true;
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -170,7 +290,7 @@ export default {
     transform: scale(1);
   }
 }
-.loader{
+.loader {
   width: 100%;
   height: 100vh;
   display: flex;

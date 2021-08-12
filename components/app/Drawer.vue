@@ -24,12 +24,9 @@ export default {
   props:{
     drawer:{
       type:Boolean,
-      required:true,
-      default:false
     },
     items:{
       type:Array,
-      required:true
     }
   },
   // computed:{
